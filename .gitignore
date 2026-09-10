@@ -1,0 +1,23 @@
+
+# Visual Studio / VS Code / .NET
+
+.vs/
+.vscode/
+bin/
+obj/
+
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+Debug/
+Release/
+
+*.dll
+*.exe
+*.pdb
+
+TestResults/
+.nuget/
+packages/
