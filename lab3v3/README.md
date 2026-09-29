@@ -1,0 +1,151 @@
+Лабораторна робота №3
+Об'єктно-орієнтоване програмування
+Варіант: 3
+Клас: NetworkStream
+Студент: Василевич Дмитро
+Група: КН-3/1
+Мова програмування: C#
+Платформа: .NET 
+
+Завдання
+Для варіанту №3 необхідно реалізувати клас NetworkStream, який імітує мережевий потік.
+
+Клас повинен містити:
+поле _address типу string;
+поле _isStreamOpen типу bool;
+публічні властивості;
+конструктор;
+метод Send(string data);
+метод Dispose();
+захищений метод Dispose(bool disposing);
+деструктор;
+інтерфейс IDisposable.
+
+У методі Main() необхідно продемонструвати три способи керування ресурсом:
+
+використання using;
+явний виклик Dispose();
+створення об'єкта без Dispose() та демонстрація роботи деструктора через GC.Collect().
+
+Реалізація класу NetworkStream
+using System;
+
+public class NetworkStream : IDisposable
+{
+    private string _address;
+    private bool _isStreamOpen;
+    private bool _disposed;
+
+    public string Address
+    {
+        get { return _address; }
+        set { _address = value; }
+    }
+
+    public bool IsStreamOpen
+    {
+        get { return _isStreamOpen; }
+    }
+
+    public NetworkStream(string address)
+    {
+        _address = address;
+        _isStreamOpen = true;
+        _disposed = false;
+
+        Console.WriteLine($"Мережевий потік відкрито: {_address}");
+    }
+
+    public void Send(string data)
+    {
+        if (_isStreamOpen)
+        {
+            Console.WriteLine($"Надсилання даних: {data}");
+        }
+        else
+        {
+            Console.WriteLine("Помилка: потік закритий.");
+        }
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed)
+        {
+            if (disposing)
+            {
+                Console.WriteLine("Звільнення керованих ресурсів.");
+            }
+
+            if (_isStreamOpen)
+            {
+                Console.WriteLine($"Закриття мережевого потоку: {_address}");
+                _isStreamOpen = false;
+            }
+
+            _disposed = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    ~NetworkStream()
+    {
+        Console.WriteLine($"Деструктор: {_address}");
+        Dispose(false);
+    }
+}
+
+![alt text](image.png)
+
+Аналіз сценаріїв
+1. Використання using
+Об'єкт створюється всередині блоку using. Після виходу з блоку автоматично викликається Dispose(), тому мережевий потік закривається.
+
+2. Явний Dispose()
+Об'єкт створюється звичайним способом. Після завершення роботи програма явно викликає:
+stream2.Dispose();
+Після цього ресурс звільняється.
+
+3. GC.Collect()
+У третьому сценарії Dispose() явно не викликається. Після втрати доступного посилання викликається:
+GC.Collect();
+GC.WaitForPendingFinalizers();
+У результаті спрацьовує деструктор:
+Деструктор: 172.16.0.1
+і відбувається закриття мережевого потоку.
+
+GitHub
+Репозиторій:
+https://github.com/Dima-200/OOP-Vasilevich
+Папка лабораторної:
+lab3v3
+
+Висновок
+Під час виконання лабораторної роботи було поглиблено розуміння життєвого циклу об'єктів у C# та керування ресурсами. Було реалізовано клас NetworkStream, який підтримує інтерфейс IDisposable та патерн Dispose.
+Було продемонстровано три способи звільнення ресурсу: автоматичне використання Dispose() через using, явний виклик Dispose() та роботу деструктора після GC.Collect().
+Таким чином, було отримано практичні навички роботи з керованими та некерованими ресурсами, інтерфейсом IDisposable, деструкторами та збирачем сміття .NET.
+
+Контрольні питання
+
+1. Що таке життєвий цикл об'єкта в .NET?
+Життєвий цикл об'єкта охоплює його створення, використання, потрапляння під контроль Garbage Collector та, за потреби, фіналізацію перед звільненням пам'яті.
+
+2. Яка різниця між керованими та некерованими ресурсами?
+Керовані ресурси автоматично контролюються середовищем .NET та звільняються Garbage Collector. Некеровані ресурси потребують явного звільнення.
+
+3. Для чого призначений інтерфейс IDisposable?
+IDisposable призначений для явного звільнення ресурсів. Він містить метод Dispose(), який викликається для завершення роботи з ресурсом.
+
+4. Як оператор using допомагає в керуванні ресурсами?
+using автоматично викликає Dispose() після завершення роботи з об'єктом. Це дозволяє гарантовано звільнити ресурс.
+
+5. Навіщо в патерні Dispose використовується GC.SuppressFinalize()?
+GC.SuppressFinalize(this) повідомляє Garbage Collector, що фіналізатор об'єкта вже не потрібно викликати, якщо ресурс був звільнений через Dispose().
+
+6. Чому в деструкторі викликається Dispose(false), а в методі Dispose() — Dispose(true)?
+При явному виклику Dispose() використовується Dispose(true), що дозволяє звільнити керовані та некеровані ресурси. У деструкторі використовується Dispose(false), оскільки під час фіналізації керовані ресурси вже не слід використовувати.
