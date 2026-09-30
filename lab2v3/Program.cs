@@ -32,13 +32,9 @@ public double AverageMark
         _averageMark = value;
     }
 }
-
-// Конструктор за замовчуванням
 public Student() : this("New Student", "N/A", 0.0)
 {
 }
-
-// Параметризований конструктор
 public Student(string name, string studentId, double averageMark)
 {
     _name = name;
@@ -48,13 +44,11 @@ public Student(string name, string studentId, double averageMark)
     Console.WriteLine($"Створено студента: {Name}");
 }
 
-// Метод для отримання інформації про студента
 public string GetStudentCard()
 {
     return $"Ім'я: {Name}\nID: {StudentId}\nСередній бал: {AverageMark:F1}";
 }
 
-// Деструктор
 ~Student()
 {
     Console.WriteLine($"Деструктор: об'єкт студента {Name} знищено.");
