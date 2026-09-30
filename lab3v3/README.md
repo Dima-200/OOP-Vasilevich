@@ -27,78 +27,7 @@
 явний виклик Dispose();
 створення об'єкта без Dispose() та демонстрація роботи деструктора через GC.Collect().
 
-Реалізація класу NetworkStream
-using System;
 
-public class NetworkStream : IDisposable
-{
-    private string _address;
-    private bool _isStreamOpen;
-    private bool _disposed;
-
-    public string Address
-    {
-        get { return _address; }
-        set { _address = value; }
-    }
-
-    public bool IsStreamOpen
-    {
-        get { return _isStreamOpen; }
-    }
-
-    public NetworkStream(string address)
-    {
-        _address = address;
-        _isStreamOpen = true;
-        _disposed = false;
-
-        Console.WriteLine($"Мережевий потік відкрито: {_address}");
-    }
-
-    public void Send(string data)
-    {
-        if (_isStreamOpen)
-        {
-            Console.WriteLine($"Надсилання даних: {data}");
-        }
-        else
-        {
-            Console.WriteLine("Помилка: потік закритий.");
-        }
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (!_disposed)
-        {
-            if (disposing)
-            {
-                Console.WriteLine("Звільнення керованих ресурсів.");
-            }
-
-            if (_isStreamOpen)
-            {
-                Console.WriteLine($"Закриття мережевого потоку: {_address}");
-                _isStreamOpen = false;
-            }
-
-            _disposed = true;
-        }
-    }
-
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
-    ~NetworkStream()
-    {
-        Console.WriteLine($"Деструктор: {_address}");
-        Dispose(false);
-    }
-}
 
 ![alt text](image.png)
 
