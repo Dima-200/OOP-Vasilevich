@@ -229,3 +229,4 @@ intern.Learn();
 
 У результаті роботи було закріплено знання про наслідування, поліморфізм, `virtual`, `override` та `new`, а також практично досліджено різницю між перевизначенням та приховуванням методів у C#.
 
+<img width="980" height="480" alt="image" src="https://github.com/user-attachments/assets/08d08359-089b-4434-a8a3-250f3dee3dcf" />
