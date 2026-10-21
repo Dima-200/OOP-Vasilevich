@@ -1,5 +1,3 @@
-﻿using System;
-
 class Money
 {
     private decimal _amount;
